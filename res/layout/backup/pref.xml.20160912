@@ -29,11 +29,4 @@
 	 android:background="#999999"
 	 android:defaultValue="0">
 	</EditTextPreference>
-	<EditTextPreference
-	 android:key="btAddress"
-	 android:summary="Адрес BT-устройства"
-	 android:title="Bluetooth address"
-	 android:background="#999999"
-	 android:defaultValue="98:D3:31:80:5B:FF">
-	</EditTextPreference>
 </PreferenceScreen>

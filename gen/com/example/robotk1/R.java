@@ -45,7 +45,9 @@ public final class R {
         public static final int ImageButton07=0x7f090006;
         public static final int ImageButton08=0x7f09000e;
         public static final int ImageButton09=0x7f090009;
-        public static final int action_settings=0x7f09001b;
+        public static final int action_settings=0x7f09001e;
+        public static final int bBTConnect=0x7f09001b;
+        public static final int bBTDisconnect=0x7f09001c;
         public static final int bSpeak=0x7f090015;
         public static final int bSpeak2=0x7f090018;
         public static final int eSpeak=0x7f090016;
@@ -62,7 +64,8 @@ public final class R {
         public static final int tableRow6=0x7f090011;
         public static final int tableRow7=0x7f090014;
         public static final int tableRow8=0x7f090017;
-        public static final int ttstable=0x7f09001a;
+        public static final int tableRow9=0x7f09001a;
+        public static final int ttstable=0x7f09001d;
         public static final int ttstable_main=0x7f090013;
     }
     public static final class layout {

@@ -190,29 +190,6 @@
                         android:textSize="10dp" />
                 </TableRow>
 
-                <TableRow
-                    android:id="@+id/tableRow9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-
-                    <Button
-                        android:id="@+id/bBTConnect"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:text="bt_connect"
-                        android:textSize="10dp" />
-						
-                    <Button
-                        android:id="@+id/bBTDisconnect"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:text="bt_disconnect"
-                        android:textSize="10dp" />
-
-                </TableRow>
-
             </TableLayout>
 
         </TableRow>
