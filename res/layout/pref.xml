@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+ xmlns:android="http://schemas.android.com/apk/res/android">
+	<EditTextPreference
+	 android:key="robotIpAddress"
+	 android:summary="IP-адрес сервера робота"
+	 android:title="ip"
+	 android:background="#999999"
+	 android:defaultValue="192.168.1.7">
+	</EditTextPreference>
+	<EditTextPreference
+	 android:key="robotIpPort"
+	 android:summary="Номер порта IP-адреса сервера робота"
+	 android:title="port"
+	 android:background="#999999"
+	 android:defaultValue="4567">
+	</EditTextPreference>
+	<EditTextPreference
+	 android:key="ttsWordsPerPattern"
+	 android:summary="Число вариантов слов на одно понятие"
+	 android:title="wpp"
+	 android:background="#999999"
+	 android:defaultValue="5">
+	</EditTextPreference>
+	<EditTextPreference
+	 android:key="ttsClearDictIfFileExists"
+	 android:summary="Взять фразы только с локального файла"
+	 android:title="clearDictIfFileExists"
+	 android:background="#999999"
+	 android:defaultValue="0">
+	</EditTextPreference>
+</PreferenceScreen>

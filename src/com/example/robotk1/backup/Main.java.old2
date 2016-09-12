@@ -1,0 +1,256 @@
+package com.example.robotk1;
+
+import com.example.robotk1.R;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Arrays;
+import java.util.Enumeration;
+
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.SeekBar;
+import android.content.*;
+
+public class Main extends Activity implements OnTouchListener {
+	Button bFront, bBack, bLeft, bRight, bUp1, bDown1, bUp2, bDown2, bManip1On, bManip1Off, bManip2On, bManip2Off;
+	Byte speedLeftFront, speedLeftBack, speedRightFront, speedRightBack, speedHands, speedManip;
+	TextView textView1;
+	Context context;
+	private final int SERVER_PORT = 4567; //Define the server port
+	private final String SERVER_ADDRESS = "192.168.0.111"; //Define the server port
+	private final int DATA_LENGTH = 54; 
+	char[] data = new char[DATA_LENGTH];
+	String comm = "";
+	String soundFileName = "/sdcard/nosound.wav";
+		 
+	 @Override
+	 protected void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  setContentView(R.layout.activity_main);
+	  
+	  context = this.getApplicationContext(); 
+      textView1 = (TextView) findViewById(R.id.textView1);
+
+      bFront = (Button) findViewById(R.id.button1);
+      bLeft = (Button) findViewById(R.id.button2);
+      bRight = (Button) findViewById(R.id.button3);
+      bBack = (Button) findViewById(R.id.button4);
+      bUp1 = (Button) findViewById(R.id.button5);
+      bDown1 = (Button) findViewById(R.id.button6);
+      bUp2 = (Button) findViewById(R.id.button7);
+      bDown2 = (Button) findViewById(R.id.button8);
+      bManip1On = (Button) findViewById(R.id.button9);
+      bManip1Off = (Button) findViewById(R.id.button10);
+      bManip2On = (Button) findViewById(R.id.button11);
+      bManip2Off = (Button) findViewById(R.id.button12);
+      
+      bFront.setOnTouchListener(this);
+      bBack.setOnTouchListener(this);
+      bLeft.setOnTouchListener(this);
+      bRight.setOnTouchListener(this);
+      bUp1.setOnTouchListener(this);
+      bDown1.setOnTouchListener(this);
+      bUp2.setOnTouchListener(this);
+      bDown2.setOnTouchListener(this);
+      bManip1On.setOnTouchListener(this);
+      bManip1Off.setOnTouchListener(this);
+      bManip2On.setOnTouchListener(this);
+      bManip2Off.setOnTouchListener(this);
+            
+	  for (int i=0; i<DATA_LENGTH; i++){
+    	  data[i] = 0;
+      };
+      
+      getSpeedMotors();
+      
+	 }	  
+	 
+	 @Override
+	 public boolean onCreateOptionsMenu(Menu menu) {
+	  getMenuInflater().inflate(R.menu.main, menu);
+	  return true;
+	 }
+	 
+	 @Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+	  int id = item.getItemId();
+	  if (id == R.id.action_settings) {
+	   return true;
+	  }
+	  return super.onOptionsItemSelected(item);
+	 }
+	 
+	 @Override
+	 protected void onDestroy (){
+		 super.onDestroy();
+	 }
+	 
+ 	public static byte b2i(boolean value) {
+ 		byte one = 1;
+ 		byte nul = 0;
+		return value ? one : nul;
+	}
+	 	
+	public void getSpeedMotors(){
+		 speedLeftFront = (byte)(((SeekBar) findViewById(R.id.seekBar1)).getProgress() & 0xFF);
+		 speedLeftBack = (byte)(((SeekBar) findViewById(R.id.seekBar1)).getProgress() & 0xFF);
+		 speedRightFront = (byte)(((SeekBar) findViewById(R.id.seekBar1)).getProgress() & 0xFF);
+		 speedRightBack = (byte)(((SeekBar) findViewById(R.id.seekBar1)).getProgress() & 0xFF);
+		 speedHands = (byte)(((SeekBar) findViewById(R.id.seekBar1)).getProgress() & 0xFF);
+		 speedManip = (byte)(((SeekBar) findViewById(R.id.seekBar1)).getProgress() & 0xFF);		 
+	 }
+	 
+	 @Override
+	 public boolean onTouch(View v, MotionEvent event) {
+		 boolean front = false, left = false, right = false, back = false, up1 = false, down1 = false, up2 = false, down2 = false, manip1on = false, manip1off = false, manip2on = false, manip2off = false;
+		  
+	 	 if (event.getAction() == MotionEvent.ACTION_UP) {
+//	 		 off = true;
+	 	 } else {
+			 try {
+			      switch (v.getId()) {
+					case R.id.button1:
+						front = true;
+	                      break;
+					case R.id.button2:
+						left = true;
+				        break;
+					case R.id.button3:
+						right = true;
+		               	break;
+					case R.id.button4:
+						back = true;
+					    break;
+					case R.id.button5:
+						up1 = true;
+					    break;
+					case R.id.button6:
+						down1 = true;
+					    break;
+					case R.id.button7:
+						up2 = true;
+					    break;
+					case R.id.button8:
+						down2 = true;
+					    break;
+					case R.id.button9:
+						manip1on = true;
+					    break;
+					case R.id.button10:
+						manip1off = true;
+					    break;
+					case R.id.button11:
+						manip2on = true;
+					    break;
+					case R.id.button12:
+						manip2off = true;
+					    break;
+					case R.id.seekBar1:
+						getSpeedMotors();
+	                      break;
+					case R.id.seekBar2:
+						getSpeedMotors();
+	                      break;
+					case R.id.seekBar3:
+						getSpeedMotors();
+	                      break;
+					case R.id.seekBar4:
+						getSpeedMotors();
+	                      break;
+					case R.id.seekBar5:
+						getSpeedMotors();
+	                      break;
+					case R.id.seekBar6:
+						getSpeedMotors();
+	                      break;
+					}   
+			     } catch (NumberFormatException e) {
+			      e.printStackTrace();
+			     }
+			 
+	    		if (left || right) {
+	    			speedLeftFront = 10;
+	    			speedLeftBack = 10;
+					speedRightFront = 10;
+					speedRightBack = 10;
+				};
+				 
+				if (down1 || down2) {
+					speedHands = (byte)(190 & 0xFF);
+		 		};
+	 	 	};
+	 	 	
+
+ 			data[11] = (char) (speedLeftBack * b2i(front || left || right || back));//pwm for left back motor
+ 			data[12] = (char) (speedLeftFront * b2i(front || left || right || back));//pwm for left front motor
+ 			data[10] = (char) (speedRightFront * b2i(front || left || right || back));//pwm for right front motor
+ 			data[9] = (char) (speedRightBack * b2i(front || left || right || back));//pwm for right back motor
+        	data[13]  = (char) (speedHands * b2i(up1 || down1 || up2 || down2));//pwm for left and right hands motors
+        	data[4]  = (char) (speedManip * b2i(manip1on || manip1off || manip2on || manip2off));//pwm for left and right hands manipulators motors
+
+        	data[22] = (char) b2i(front || right);//rel for left motors -> front
+        	data[23] = (char) b2i(left || back);//rel for left motors -> back
+    		data[24] = (char) b2i(front || left);//rel for right motors -> front
+    		data[25] = (char) b2i(right || back);//rel for right motors -> back
+
+    		data[26] = (char) b2i(up1);//rel for left hand -> up
+    		data[27] = (char) b2i(down1);//rel for left hand -> down
+    		data[28] = (char) b2i(up2);//rel for right hand -> up
+    		data[29] = (char) b2i(down2);//rel right hand -> dowm
+
+    		data[30] = (char) b2i(manip1on);//rel for left hand manipulator -> open
+    		data[31] = (char) b2i(manip1off);//rel for left hand manipulator -> close
+    		data[32] = (char) b2i(manip2on);//rel for right hand manipulator -> open
+    		data[33] = (char) b2i(manip2off);//rel for right hand manipulator -> close
+
+    		if (manip1on) {
+    			soundFileName = "001.m4a";
+    		} else if (manip1off) {
+    			soundFileName = "002.m4a";
+    		} else if (manip2on) {
+    			soundFileName = "003.m4a";
+    		} else if (manip2off) {
+    			soundFileName = "004.m4a";
+    		};
+    		
+			ClientAsyncTask clientAST = new ClientAsyncTask();
+           	clientAST.execute(new char[][] { (new String(SERVER_ADDRESS)).toCharArray(), String.valueOf(SERVER_PORT).toCharArray(), (new String(data)+soundFileName).toCharArray()});		 		
+//           	textView1.setText(String.valueOf((byte)((new String(data)).charAt(12))));
+
+           	return false;	
+	}
+
+	class ClientAsyncTask extends AsyncTask<char[], Void, Void> {
+	    @Override
+	    protected Void doInBackground(char[]... params) {
+	     try {
+	      Socket socket = new Socket(new String(params[0]), Integer.parseInt(new String(params[1])));
+	      new PrintWriter(socket.getOutputStream(),true).println(params[2]);
+	      socket.close();
+	     } catch (IOException e) {
+	      e.printStackTrace();
+	     }
+	     return null;
+	    }
+	}  	    
+	    
+}

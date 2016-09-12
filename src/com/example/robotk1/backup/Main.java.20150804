@@ -1,0 +1,330 @@
+package com.example.robotk1;
+
+import com.example.robotk1.R;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Enumeration;
+
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.SeekBar;
+import android.content.*;
+import java.io.ByteArrayInputStream;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import android.os.Environment;
+
+public class Main extends Activity implements OnTouchListener {
+	Button bFront, bBack, bLeft, bRight, bUp1, bDown1, bUp2, bDown2, bManip1On, bManip1Off, bManip2On, bManip2Off;
+	Button bSound1, bSound2, bSound3, bSound4, bSound5, bSound6, bSound7, bSound8, bSound9, bSound10;
+	Button bSound11, bSound12, bSound13, bSound14, bSound15, bSound16, bSound17, bSound18, bSound19, bSound20;
+//	Byte speedLeftFront, speedLeftBack, speedRightFront, speedRightBack, speedHands, speedManip;
+	Byte speedHands;
+	TextView textView1, textSpeedMotors, textSpeedHands;
+	SeekBar seekBarSpeedMotors, seekBarSpeedHands;
+	Context context;
+	private final int SERVER_PORT = 4567; //Define the server port
+	private String SERVER_ADDRESS = "192.168.0.111"; //Define the server port
+	String comm = "";
+    byte soundNumber = 0;		
+    byte soundsCount = 20;
+		 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+  		setContentView(R.layout.activity_main);
+  
+		context = this.getApplicationContext(); 
+		textView1 = (TextView) findViewById(R.id.textView1);
+		textSpeedMotors = (TextView) findViewById(R.id.TextView01);
+		textSpeedHands = (TextView) findViewById(R.id.TextView02);
+		seekBarSpeedMotors = (SeekBar) findViewById(R.id.seekBar1);
+		seekBarSpeedHands = (SeekBar) findViewById(R.id.seekBar5);
+		
+		bFront = (Button) findViewById(R.id.button1);
+		bLeft = (Button) findViewById(R.id.button2);
+		bRight = (Button) findViewById(R.id.button3);
+		bBack = (Button) findViewById(R.id.button4);
+		bUp1 = (Button) findViewById(R.id.button5);
+		bDown1 = (Button) findViewById(R.id.button6);
+		bUp2 = (Button) findViewById(R.id.button7);
+		bDown2 = (Button) findViewById(R.id.button8);
+		bManip1On = (Button) findViewById(R.id.button9);
+		bManip1Off = (Button) findViewById(R.id.button10);
+		bManip2On = (Button) findViewById(R.id.button11);
+		bManip2Off = (Button) findViewById(R.id.button12);
+		bSound1 = (Button) findViewById(R.id.Button01);
+		bSound2 = (Button) findViewById(R.id.Button02);
+		bSound3 = (Button) findViewById(R.id.Button03);
+		bSound4 = (Button) findViewById(R.id.Button04);
+		bSound5 = (Button) findViewById(R.id.Button05);
+		bSound6 = (Button) findViewById(R.id.Button06);
+		bSound7 = (Button) findViewById(R.id.Button07);
+		bSound8 = (Button) findViewById(R.id.Button08);
+		bSound9 = (Button) findViewById(R.id.Button09);
+		bSound10 = (Button) findViewById(R.id.Button10);
+		bSound11 = (Button) findViewById(R.id.Button11);
+		bSound12 = (Button) findViewById(R.id.Button12);
+		bSound13 = (Button) findViewById(R.id.Button13);
+		bSound14 = (Button) findViewById(R.id.Button14);
+		bSound15 = (Button) findViewById(R.id.Button15);
+		bSound16 = (Button) findViewById(R.id.Button16);
+		bSound17 = (Button) findViewById(R.id.Button17);
+		bSound18 = (Button) findViewById(R.id.Button18);
+		bSound19 = (Button) findViewById(R.id.Button19);
+		bSound20 = (Button) findViewById(R.id.Button20);
+
+
+		seekBarSpeedMotors.setOnTouchListener(this);
+		seekBarSpeedHands.setOnTouchListener(this);
+		bFront.setOnTouchListener(this);
+		
+		bFront.setOnTouchListener(this);
+		bBack.setOnTouchListener(this);
+		bLeft.setOnTouchListener(this);
+		bRight.setOnTouchListener(this);
+		bUp1.setOnTouchListener(this);
+		bDown1.setOnTouchListener(this);
+		bUp2.setOnTouchListener(this);
+		bDown2.setOnTouchListener(this);
+		bManip1On.setOnTouchListener(this);
+		bManip1Off.setOnTouchListener(this);
+		bManip2On.setOnTouchListener(this);
+		bManip2Off.setOnTouchListener(this);
+		bSound1.setOnTouchListener(this);
+		bSound2.setOnTouchListener(this);
+		bSound3.setOnTouchListener(this);
+		bSound4.setOnTouchListener(this);
+		bSound5.setOnTouchListener(this);
+		bSound6.setOnTouchListener(this);
+		bSound7.setOnTouchListener(this);
+		bSound8.setOnTouchListener(this);
+		bSound9.setOnTouchListener(this);
+		bSound10.setOnTouchListener(this);
+		bSound11.setOnTouchListener(this);
+		bSound12.setOnTouchListener(this);
+		bSound13.setOnTouchListener(this);
+		bSound14.setOnTouchListener(this);
+		bSound15.setOnTouchListener(this);
+		bSound16.setOnTouchListener(this);
+		bSound17.setOnTouchListener(this);
+		bSound18.setOnTouchListener(this);
+		bSound19.setOnTouchListener(this);
+		bSound20.setOnTouchListener(this);
+
+		textSpeedMotors.setText(String.format("%02d", (byte) (seekBarSpeedMotors.getProgress())));
+		textSpeedHands.setText(String.format("%02d", (byte) (seekBarSpeedHands.getProgress())));
+		
+		File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"/server_address.txt");
+		try {
+		    BufferedReader br = new BufferedReader(new FileReader(file));
+		    SERVER_ADDRESS = br.readLine();
+			Toast.makeText(this.getApplicationContext(), SERVER_ADDRESS, Toast.LENGTH_SHORT).show();
+		    br.close();
+		} catch (IOException e) {}      
+	}	  
+	 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	 
+	@Override
+	protected void onDestroy (){
+		super.onDestroy();
+	}
+	 	 
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		String comm = "", speed = "";
+		byte val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0/*, val6 = 0*/, val7 = 0;
+		boolean front = false, left = false, right = false, back = false, up1 = false, down1 = false, up2 = false, down2 = false, manip1on = false, manip1off = false, manip2on = false, manip2off = false, off = false;
+		  
+		if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
+			switch (v.getId()) {
+			case R.id.button1:
+				front = true;
+				comm += "front";
+				break;
+			case R.id.button2:
+				left = true;
+				comm += "left";
+		        break;
+			case R.id.button3:
+				right = true;
+				comm += "right";
+	           	break;
+			case R.id.button4:
+				back = true;
+				comm += "back";
+			    break;
+			case R.id.button5:
+				up1 = true;
+				comm += "up1";
+			    break;
+			case R.id.button6:
+				down1 = true;
+				comm += "down1";
+			    break;
+			case R.id.button7:
+				up2 = true;
+				comm += "up2";
+			    break;
+			case R.id.button8:
+				down2 = true;
+				comm += "down2";
+			    break;
+			case R.id.button9:
+				manip1on = true;
+				comm += "manip1on";
+			    break;
+			case R.id.button10:
+				manip1off = true;
+				comm += "manip1off";
+			    break;
+			case R.id.button11:
+				manip2on = true;
+				comm += "manip2on";
+			    break;
+			case R.id.button12:
+				manip2off = true;
+				comm += "manip2off";
+			    break;
+			case R.id.seekBar1:
+				textSpeedMotors.setText(String.format("%02d", (byte) (seekBarSpeedMotors.getProgress())));
+			    break;
+			case R.id.seekBar5:
+				textSpeedHands.setText(String.format("%02d", (byte) (seekBarSpeedHands.getProgress())));
+			    break;
+			default:
+				comm = "off"; 
+				off = true;
+			    break;
+			}   
+		} else {
+			comm = "off"; 
+			off = true;
+		};
+		
+		int id;//Button0N.touch() = soundPlay("\sdcard\00N.m4a")
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			for (byte i = 1; i <= soundsCount; i++) {
+				id = getResources().getIdentifier("Button" + String.format("%02d", i), "id", context.getPackageName());
+				if (v.getId() == id) {
+					comm = "off";
+					off = true;
+					val7 = i;
+					
+				}
+			}
+		}
+	 	 	
+		if (comm != "") { 
+			if (!off) {
+				SeekBar speed1, speed2, speed3, speed4, speed5, speed6;
+				speed1 = (SeekBar) findViewById(R.id.seekBar1);
+				speed5 = (SeekBar) findViewById(R.id.seekBar5);
+				val1 = (byte) (speed1.getProgress());
+				val2 = val1;//(byte) (speed2.getProgress());
+				val3 = val1;//(byte) (speed3.getProgress());
+				val4 = val1;//(byte) (speed4.getProgress());
+				val5 = (byte) (speed5.getProgress());
+//				val6 = val5;//(byte) (speed6.getProgress());
+	
+				if (left || right) {
+					val1 = 10;
+					val2 = 10;
+					val3 = 10;
+					val4 = 10;
+				};
+				 
+				
+				if (up2) {//left hand
+					val5 = (byte)((210 + ((val5-1)*5)) & 0xFF);
+		 		} else
+				if (up1) {//right hand
+					val5 = (byte)((210 + ((val5-1)*5)) & 0xFF);
+		 		} else
+				if (down2) {//left hand
+					val5 = (byte)((190 + ((val5-1)*5)) & 0xFF);
+		 		} else
+				if (down1) {//right hand
+					val5 = (byte)((190 + ((val5-1)*5)) & 0xFF);
+		 		} else
+				if (manip1on || manip1off || manip2on || manip2off) {//right hand
+					val5 = (byte)((100 + ((val5-1)*5)) & 0xFF);
+		 		};
+			};
+
+			speed += String.format("%03d", 6);//pwm count
+			speed += String.format("%03d", val1);
+			speed += String.format("%03d", val2);
+			speed += String.format("%03d", val3);
+			speed += String.format("%03d", val4);
+			speed += String.format("%03d", val5);
+//			speed += String.format("%03d", val6);
+			speed += String.format("%03d", val7);
+
+			ClientAsyncTask clientAST = new ClientAsyncTask();
+           	clientAST.execute(new String[] { SERVER_ADDRESS, String.valueOf(SERVER_PORT), speed + comm});
+           	
+           	/*
+    	    BufferedReader in;
+    	    InputStreamReader is;
+    	    String str = "12345";
+			InputStream aa = new ByteArrayInputStream(str.getBytes());
+			is = new InputStreamReader(aa);
+    	    in = new BufferedReader(is);
+    	    try {
+    	    	textView1.setText(in.readLine());
+    	    } catch (Exception ex) {};
+			*/
+		}
+		return false;	
+	}
+
+	class ClientAsyncTask extends AsyncTask<String, Void, Void> {
+	@Override
+		protected Void doInBackground(String... params) {
+			try {
+				Socket socket = new Socket(params[0], Integer.parseInt(params[1]));
+				new PrintWriter(socket.getOutputStream(),true).println(params[2]);
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+}

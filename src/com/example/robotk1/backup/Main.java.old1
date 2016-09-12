@@ -1,0 +1,252 @@
+package com.example.robotk1;
+
+import com.example.robotk1.R;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Enumeration;
+
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.SeekBar;
+import android.content.*;
+
+public class Main extends Activity implements OnTouchListener {
+	Button bFront, bBack, bLeft, bRight, bUp1, bDown1, bUp2, bDown2, bManip1On, bManip1Off, bManip2On, bManip2Off;
+	TextView textView1;
+	Context context;
+	private final int SERVER_PORT = 4567; //Define the server port
+	private final String SERVER_ADDRESS = "192.168.0.111"; //Define the server port
+	String comm = "";
+		 
+	 @Override
+	 protected void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  setContentView(R.layout.activity_main);
+	  
+	  context = this.getApplicationContext(); 
+      textView1 = (TextView) findViewById(R.id.textView1);
+
+      bFront = (Button) findViewById(R.id.button1);
+      bLeft = (Button) findViewById(R.id.button2);
+      bRight = (Button) findViewById(R.id.button3);
+      bBack = (Button) findViewById(R.id.button4);
+      bUp1 = (Button) findViewById(R.id.button5);
+      bDown1 = (Button) findViewById(R.id.button6);
+      bUp2 = (Button) findViewById(R.id.button7);
+      bDown2 = (Button) findViewById(R.id.button8);
+      bManip1On = (Button) findViewById(R.id.button9);
+      bManip1Off = (Button) findViewById(R.id.button10);
+      bManip2On = (Button) findViewById(R.id.button11);
+      bManip2Off = (Button) findViewById(R.id.button12);
+      
+      bFront.setOnTouchListener(this);
+      bBack.setOnTouchListener(this);
+      bLeft.setOnTouchListener(this);
+      bRight.setOnTouchListener(this);
+      bUp1.setOnTouchListener(this);
+      bDown1.setOnTouchListener(this);
+      bUp2.setOnTouchListener(this);
+      bDown2.setOnTouchListener(this);
+      bManip1On.setOnTouchListener(this);
+      bManip1Off.setOnTouchListener(this);
+      bManip2On.setOnTouchListener(this);
+      bManip2Off.setOnTouchListener(this);
+            
+	 }	  
+	 
+	 @Override
+	 public boolean onCreateOptionsMenu(Menu menu) {
+	  getMenuInflater().inflate(R.menu.main, menu);
+	  return true;
+	 }
+	 
+	 @Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+	  int id = item.getItemId();
+	  if (id == R.id.action_settings) {
+	   return true;
+	  }
+	  return super.onOptionsItemSelected(item);
+	 }
+	 
+	 @Override
+	 protected void onDestroy (){
+		 super.onDestroy();
+	 }
+	 
+	 @Override
+	 public boolean onTouch(View v, MotionEvent event) {
+		 String comm = "";
+		 String speed = "";
+		 boolean front = false, left = false, right = false, back = false, up1 = false, down1 = false, up2 = false, down2 = false, manip1on = false, manip1off = false, manip2on = false, manip2off = false, off = false;
+		  
+//	 	 if (event.getAction() == MotionEvent.ACTION_UP) {
+//	 		 comm = "off"; off = true;
+	 	 if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
+			 try {
+			      switch (v.getId()) {
+					case R.id.button1:
+						front = true;
+						comm += "front";
+	                      break;
+					case R.id.button2:
+						left = true;
+						comm += "left";
+				        break;
+					case R.id.button3:
+						right = true;
+						comm += "right";
+		               	break;
+					case R.id.button4:
+						back = true;
+						comm += "back";
+					    break;
+					case R.id.button5:
+						up1 = true;
+						comm += "up1";
+					    break;
+					case R.id.button6:
+						down1 = true;
+						comm += "down1";
+					    break;
+					case R.id.button7:
+						up2 = true;
+						comm += "up2";
+					    break;
+					case R.id.button8:
+						down2 = true;
+						comm += "down2";
+					    break;
+					case R.id.button9:
+						manip1on = true;
+						comm += "manip1on";
+					    break;
+					case R.id.button10:
+						manip1off = true;
+						comm += "manip1off";
+					    break;
+					case R.id.button11:
+						manip2on = true;
+						comm += "manip2on";
+					    break;
+					case R.id.button12:
+						manip2off = true;
+						comm += "manip2off";
+					    break;
+					}   
+			     } catch (NumberFormatException e) {
+			      e.printStackTrace();
+			     }
+	 	 	} else {
+		 		 comm = "off"; off = true;
+
+	 	 	};
+	 	 	
+		 	if (comm != "") { 
+				byte val1 = 0;
+				byte val2 = 0;
+				byte val3 = 0;
+				byte val4 = 0;
+				byte val5 = 0;
+				byte val6 = 0;
+				
+				if (!off){
+					SeekBar speed1, speed2, speed3, speed4, speed5, speed6;
+					speed1 = (SeekBar) findViewById(R.id.seekBar1);
+					speed2 = (SeekBar) findViewById(R.id.seekBar2);
+					speed3 = (SeekBar) findViewById(R.id.seekBar3);
+					speed4 = (SeekBar) findViewById(R.id.seekBar4);
+					speed5 = (SeekBar) findViewById(R.id.seekBar5);
+					speed6 = (SeekBar) findViewById(R.id.seekBar6);
+					val1 = (byte) (speed1.getProgress());
+					val2 = (byte) (speed2.getProgress());
+					val3 = (byte) (speed3.getProgress());
+					val4 = (byte) (speed4.getProgress());
+					val5 = (byte) (speed5.getProgress());
+					val6 = (byte) (speed6.getProgress());
+	
+					if (left || right) {
+						val1 = 10;
+						val2 = 10;
+						val3 = 10;
+						val4 = 10;
+					};
+					 
+					if (down1 || down2) {
+						val5 = (byte)(200 & 0xFF);
+			 		};
+				};
+				
+				speed += String.format("%03d", 7);//pwm count
+				speed += String.format("%03d", val1);
+				speed += String.format("%03d", val2);
+				speed += String.format("%03d", val3);
+				speed += String.format("%03d", val4);
+				speed += String.format("%03d", val5);
+				speed += String.format("%03d", val6);
+
+				int val7 = 0;//number of sound file
+				if (manip1on) {val7 = 1;} 
+				else if (manip1off) {val7 = 2;}
+				else if (manip2on) {val7 = 3;}
+				else if (manip2off) {val7 = 4;};
+				speed += String.format("%03d", val7);
+				
+				
+				ClientAsyncTask clientAST = new ClientAsyncTask();
+               	clientAST.execute(new String[] { SERVER_ADDRESS, String.valueOf(SERVER_PORT), speed + comm});		 		
+//               	textView1.setText(comm);
+               	
+			 /*	textView1.setText(SERVER_ADDRESS + comm);
+				new Thread(new Runnable() {
+	             public void run() {
+	                 Socket client = null;
+	                 try {
+	                     client = new Socket(java.net.InetAddress.getByName(SERVER_ADDRESS), SERVER_PORT);
+	                     PrintWriter out = new PrintWriter(client.getOutputStream(),true);
+	                     out.write("front");
+//	                 	client.close();
+	                 } catch (IOException e) {
+	                	 textView1.setText("Error");
+	                 }
+	             }
+	           }).start();*/
+		 	}
+
+		 return false;	
+	 }
+
+	class ClientAsyncTask extends AsyncTask<String, Void, Void> {
+	    @Override
+	    protected Void doInBackground(String... params) {
+	     try {
+	      Socket socket = new Socket(params[0], Integer.parseInt(params[1]));
+	      new PrintWriter(socket.getOutputStream(),true).println(params[2]);
+	      socket.close();
+	     } catch (IOException e) {
+	      e.printStackTrace();
+	     }
+	     return null;
+	    }
+	}  	    
+	    
+}

@@ -1,0 +1,198 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alpha="50" >
+
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TableRow
+                    android:id="@+id/tableRow2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <ImageButton
+                        android:id="@+id/ImageButton05"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_up_box_256_hand" />
+
+                    <ImageButton
+                        android:id="@+id/ImageButton01"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_up_box_256" />
+
+                    <ImageButton
+                        android:id="@+id/ImageButton07"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_up_box_256_hand" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <ImageButton
+                        android:id="@+id/ImageButton02"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_left_box_256_2" />
+
+                    <ImageButton
+                        android:id="@+id/ImageButton09"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/raygun_256" />
+
+                    <ImageButton
+                        android:id="@+id/ImageButton03"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_right_box_256" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow4"
+                    android:scaleType="fitCenter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <ImageButton
+                        android:id="@+id/ImageButton06"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_down_box_256_hand" />
+
+                    <ImageButton
+                        android:id="@+id/ImageButton04"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_down_box_256" />
+
+                    <ImageButton
+                        android:id="@+id/ImageButton08"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_down_box_256_hand" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <SeekBar
+                        android:id="@+id/seekBar1"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_span="3"
+                        android:max="10"
+                        android:maxHeight="13dip"
+                        android:progress="3" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <SeekBar
+                        android:id="@+id/seekBar2"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_span="3"
+                        android:max="10"
+                        android:progress="1" />
+
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+				android:id="@+id/ttstable_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TableRow
+                    android:id="@+id/tableRow7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/bSpeak"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="сказать"
+                        android:textSize="10dp" />
+
+                    <EditText
+                        android:id="@+id/eSpeak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_span="4"
+                        android:ems="10"
+                        android:text="Привет"
+                        android:textSize="10dp" >
+
+                        <requestFocus />
+                    </EditText>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/bSpeak2"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="сказать"
+                        android:textSize="10dp" />
+
+                    <EditText
+                        android:id="@+id/eSpeak2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_span="4"
+                        android:ems="10"
+                        android:text="Мне нужно подумать"
+                        android:textSize="10dp" />
+                </TableRow>
+
+            </TableLayout>
+
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>
