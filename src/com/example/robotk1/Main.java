@@ -228,7 +228,7 @@ public class Main extends Activity implements OnTouchListener {
 				speakText = eSpeak2.getText().toString();
 				off = true;
 				comm += "off";
-				Toast.makeText(context, "111", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(context, "111", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.bBTConnect: 
 				btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -258,7 +258,7 @@ public class Main extends Activity implements OnTouchListener {
 				}
 				break;
 			default:
-				Toast.makeText(context, "444", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(context, "444", Toast.LENGTH_SHORT).show();
 				comm = "off";
 				off = true;
 				break;
@@ -282,10 +282,9 @@ public class Main extends Activity implements OnTouchListener {
 				val1 = (byte) (speed1.getProgress());
 				val2 = (byte) (speed2.getProgress());
 
-				if (left || right) {
-					val1 = 10;
-				}
-				;
+				//if (left || right) {
+				//	val1 = 10;
+				//};
 
 				if (up2) {// left hand
 					val2 = (byte) ((210 + ((val2 - 1) * 5)) & 0xFF);
@@ -299,8 +298,7 @@ public class Main extends Activity implements OnTouchListener {
 					val2 = (byte) ((100 + ((val2 - 1) * 5)) & 0xFF);
 				}
 				;
-			}
-			;
+			};
 
 			speed += String.format("%03d", 2);// pwm count
 			speed += String.format("%03d", val1);
