@@ -112,19 +112,47 @@ public class Main extends Activity implements OnTouchListener {
 							Toast.makeText(context, "Bluetooth connection failed!",	Toast.LENGTH_SHORT).show();
 						}
 
-						//mBTConnectedThread = new BTConnectedThread(btSocket, h, RECIEVE_MESSAGE_BT_CONNECTED);
-						//mBTConnectedThread.start();
+						mBTConnectedThread = new BTConnectedThread(btSocket, h, RECIEVE_MESSAGE_BT_CONNECTED);
+						mBTConnectedThread.start();
 					break;
 					case RECIEVE_MESSAGE_BT_CONNECTED:
 						String str = (String) msg.obj;
 						eSpeak2 = (EditText) findViewById(R.id.eSpeak2);
 						eSpeak2.setText(str);
+						//try {
+							//byte[] bb = toByteArray(msg.obj);
+							//eSpeak2.setText(":"+(Byte)bb[0]+","+(Byte)bb[1]);
+						//	Byte bb = (Byte)msg.obj;
+						//	eSpeak2.setText(":"+bb);
+						//} catch (IOException e) {
+						//}
 					break;
 				}
 			};		
 		};
 		
 	}
+	
+    public static byte[] toByteArray(Object obj) throws IOException {
+        byte[] bytes = null;
+        ByteArrayOutputStream bos = null;
+        ObjectOutputStream oos = null;
+        try {
+            bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(obj);
+            oos.flush();
+            bytes = bos.toByteArray();
+        } finally {
+            if (oos != null) {
+                oos.close();
+            }
+            if (bos != null) {
+                bos.close();
+            }
+        }
+        return bytes;
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
