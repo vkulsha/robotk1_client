@@ -114,18 +114,32 @@ public class Main extends Activity implements OnTouchListener {
 
 						mBTConnectedThread = new BTConnectedThread(btSocket, h, RECIEVE_MESSAGE_BT_CONNECTED);
 						mBTConnectedThread.start();
+
 					break;
 					case RECIEVE_MESSAGE_BT_CONNECTED:
-						String str = (String) msg.obj;
-						eSpeak2 = (EditText) findViewById(R.id.eSpeak2);
-						eSpeak2.setText(str);
-						//try {
-							//byte[] bb = toByteArray(msg.obj);
-							//eSpeak2.setText(":"+(Byte)bb[0]+","+(Byte)bb[1]);
-						//	Byte bb = (Byte)msg.obj;
-						//	eSpeak2.setText(":"+bb);
-						//} catch (IOException e) {
-						//}
+						final String rstr = (String) msg.obj;
+						if (rstr != "") {
+							final String[] sonars = rstr.split(",");
+							if (sonars.length > 1) {
+								int sonar1 = sonars[0] != "" ? Integer.valueOf(sonars[0]) : 0;
+								int sonar2 = sonars[1] != "" ? Integer.valueOf(sonars[1]) : 0;
+								String comm_ = "front";
+								String speed_ = "000";
+								//if (Math.abs(sonar1 - sonar2) <= 10) {
+									if (sonar1 < 10) {
+										speed_ = "000";
+									} else if (sonar1 < 50) {
+										speed_ = "001";
+									} else if (sonar1 < 100) {
+										speed_ = "002";
+									} else {
+										speed_ = "003";
+									}
+								//}
+								sss(comm_, speed_);
+								eSpeak2.setText(rstr + " " + comm_ + " " + speed_);
+							}
+						}
 					break;
 				}
 			};		
